@@ -1,6 +1,6 @@
 resource "aws_s3_bucket" "first_bucket" {
 
-  bucket = "first-bucket-${terraform.workspace}-11-03-26"
+  bucket = "first-terraform-bucket-${terraform.workspace}-11-03-26"
 
   tags = {
     "Resource Owner"    = "Dhruvi"

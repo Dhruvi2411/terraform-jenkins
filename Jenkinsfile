@@ -3,8 +3,8 @@ pipeline {
 
         environment {
         // // AWS credentials from Jenkins credential store
-        // AWS_ACCESS_KEY_ID     = credentials('aws-access-key-id')
-        // AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
+        AWS_ACCESS_KEY_ID     = credentials('aws_access_key_id')
+        AWS_SECRET_ACCESS_KEY = credentials('aws_secret_access_key')
         AWS_DEFAULT_REGION    = 'us-east-1'
         TF_IN_AUTOMATION      = 'true'
     }
@@ -46,8 +46,8 @@ pipeline {
 
         stage('Terraform Init') {
                 environment {
-                AWS_ACCESS_KEY_ID     = credentials('aws-access-key-id')
-                AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
+                AWS_ACCESS_KEY_ID     = credentials('aws_access_key_id')
+                AWS_SECRET_ACCESS_KEY = credentials('aws_secret_access_key')
             }
             steps {
                 sh '''
@@ -78,8 +78,8 @@ pipeline {
 
         stage('Terraform Plan') {
                 environment {
-                AWS_ACCESS_KEY_ID     = credentials('aws-access-key-id')
-                AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
+                AWS_ACCESS_KEY_ID     = credentials('aws_access_key_id')
+                AWS_SECRET_ACCESS_KEY = credentials('aws_secret_access_key')
             }
             steps {
                 sh 'terraform plan'
@@ -88,8 +88,8 @@ pipeline {
 
         stage('Terraform Apply') {
             environment {
-                AWS_ACCESS_KEY_ID     = credentials('aws-access-key-id')
-                AWS_SECRET_ACCESS_KEY = credentials('aws-secret-access-key')
+                AWS_ACCESS_KEY_ID     = credentials('aws_access_key_id')
+                AWS_SECRET_ACCESS_KEY = credentials('aws_secret_access_key')
             }
             steps {
                 sh 'terraform apply -auto-approve'
