@@ -13,14 +13,14 @@ resource "aws_s3_bucket" "first_bucket" {
 
 }
 
-resource "aws_s3_bucket_acl" "example" {
-  bucket = aws_s3_bucket.first_bucket.id
-  acl    = "private"
-}
+# resource "aws_s3_bucket_acl" "example" {
+#   bucket = aws_s3_bucket.first_bucket.id
+#   acl    = "private"
+# }
 
-resource "aws_s3_bucket_versioning" "versioning_example" {
-  bucket = aws_s3_bucket.first_bucket.id
-  versioning_configuration {
-    status = "Enabled"
-  }
-}
+# resource "aws_s3_bucket_versioning" "versioning_example" {
+#   bucket = aws_s3_bucket.first_bucket.id
+#   versioning_configuration {
+#     status = "Enabled"
+#   }
+# }

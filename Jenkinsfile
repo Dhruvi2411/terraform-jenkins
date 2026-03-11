@@ -17,26 +17,9 @@ pipeline {
         )
     }
 
+
+
     stages {
-
-        // stage('Run AWS CLI command') {
-        //   steps {
-        //         script {
-        //             withCredentials([
-        //                 // Bind Jenkins credential ID 'my-aws-creds' to AWS standard environment variables
-        //                 awsCredentials(credentialsId: 'my-aws-creds', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')
-        //             ]) {
-        //                 sh '''
-        //                 # The shell script can now use aws cli commands, which will automatically pick up the environment variables
-        //                 echo "Listing S3 buckets using AWS CLI..."
-        //                 aws s3 ls
-        //                 # Ensure no secrets are echoed
-        //                 '''
-        //             }
-        //         }
-        //     }
-        // }       
-
 
         stage('Checkout') {
             steps {
@@ -61,22 +44,18 @@ pipeline {
 
         stage('Workspace Setup') {
             steps {
-                sh '''
-                WORKSPACE=${ENVIRONMENT}
-
-                if terraform workspace list | grep -w $WORKSPACE
+                sh """
+                if terraform workspace list | grep -w ${params.ENVIRONMENT}
                 then
-                    echo "Workspace exists. Selecting..."
-                    terraform workspace select $WORKSPACE
+                    terraform workspace select ${params.ENVIRONMENT}
                 else
-                    echo "Workspace not found. Creating..."
-                    terraform workspace new $WORKSPACE
+                    terraform workspace new ${params.ENVIRONMENT}
                 fi
-                '''
+                """
             }
         }
 
-        stage('Terraform Plan') {
+    stage('Terraform Plan') {
                 environment {
                 AWS_ACCESS_KEY_ID     = credentials('aws_access_key_id')
                 AWS_SECRET_ACCESS_KEY = credentials('aws_secret_access_key')
