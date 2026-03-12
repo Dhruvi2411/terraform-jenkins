@@ -2,7 +2,6 @@ pipeline {
     agent any
 
         environment {
-        // // AWS credentials from Jenkins credential store
         AWS_ACCESS_KEY_ID     = credentials('aws_access_key_id')
         AWS_SECRET_ACCESS_KEY = credentials('aws_secret_access_key')
         AWS_DEFAULT_REGION    = 'ap-south-1'
@@ -28,10 +27,6 @@ pipeline {
         }
 
         stage('Terraform Init') {
-            //     environment {
-            //     AWS_ACCESS_KEY_ID     = credentials('aws_access_key_id')
-            //     AWS_SECRET_ACCESS_KEY = credentials('aws_secret_access_key')
-            // }
             steps {
                 sh '''
                 terraform init -reconfigure \
@@ -56,22 +51,24 @@ pipeline {
         }
 
     stage('Terraform Plan') {
-            //     environment {
-            //     AWS_ACCESS_KEY_ID     = credentials('aws_access_key_id')
-            //     AWS_SECRET_ACCESS_KEY = credentials('aws_secret_access_key')
-            // }
             steps {
-                sh 'terraform plan'
+                sh 'terraform plan -out=tfplan > plan_output.txt'
+            }
+        }
+
+    stage('Manual Approval') {
+        steps {
+            script {
+                def planOutput = readFile('plan_output.txt')
+                input message: "Review the Terraform plan before applying:\n\n${planOutput}",
+                        ok: 'Proceed with Apply'
+                }
             }
         }
 
         stage('Terraform Apply') {
-            // environment {
-            //     AWS_ACCESS_KEY_ID     = credentials('aws_access_key_id')
-            //     AWS_SECRET_ACCESS_KEY = credentials('aws_secret_access_key')
-            // }
             steps {
-                sh 'terraform apply -auto-approve'
+                sh 'terraform apply -auto-approve tfplan'
             }
         }
 
